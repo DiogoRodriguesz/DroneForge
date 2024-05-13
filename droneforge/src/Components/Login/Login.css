@@ -1,80 +1,116 @@
-body {
-    min-height: 100vh;
-    margin: 0;
-    padding: 0;
-    background-color: #f5f8fa;
+body, button, input, textarea {
+    font-family: 'Poppins', sans-serif;
 }
 
-.container {
+.login-container {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
-    background-color: #f5f8fa;
+    min-height: 100vh;
+    background-color: #FAFAFA;
+    position: relative;
+    overflow: hidden;
 }
 
-.form-container {
-    display: flex;
-    width: 80%; 
-    background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
-}
-
-.form-column h2 {
-    margin-bottom: 20px;
-    text-align: center;
-    color: #333;
-}
-
-#formEmail,
-#formPassword {
-  margin-bottom: 20px;
-}
-
-.submit-button {
+.background-image {
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
-    font-size: 16px;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-.forgot-password-link {
-    margin-top: 20px;
+.login-illustration {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+.login-form-container {
+    z-index: 10;
+    max-width: 400px;
+    width: 100%;
+    min-width: 300px;
+    padding: 2rem;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 30px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+.login-title, .login-subtitle {
+    color: #333;
     text-align: center;
 }
-  
-.forgot-password-link a {
-    color: #007bff; 
+
+.login-title {
+    margin-bottom: 1rem;
+    font-weight: bold;
+    font-size: 34px;
 }
 
-.signup-link a {
-    color: #007bff;
+.login-subtitle {
+    font-size: 14px;
+    color: #888;
+    margin-bottom: 2rem;
+}
+
+.form-control, .login-button {
+    width: 100%;
+    border-radius: 20px;
+}
+
+.form-control {
+    border: 2px solid #ccc;
+    height: 50px;
+    margin-bottom: 1rem;
+}
+
+.form-control:focus {
+    border-color: #0056b3;
+    box-shadow: 0 0 0 0.2rem rgba(0, 86, 179, 0.25);
+}
+
+.password-group {
+    position: relative;
+    margin-bottom: 2rem; /* Increased margin-bottom */
+}
+
+.forgot-password {
+    position: absolute;
+    bottom: -1.8rem; /* Increased distance from the input field */
+    right: 0;
+    font-size: 0.8rem;
+    color: #888;
+    padding-right: 0.5rem; /* Added some breathing room */
+}
+
+.login-button {
+    background-color: #222;
+    color: white;
+    padding: 0.75rem;
+    margin-bottom: 1rem; /* Increased margin-bottom */
+}
+
+.login-button:hover {
+    background-color: #333;
 }
 
 .signup-link {
-    display: flex;
-    justify-content: center;
-    margin-top: 20px;
+    color: #888;
+    display: block;
+    text-align: center;
+    font-size: 0.85em;
+    margin-top: 1rem;
 }
 
-.form-column {
-    /* allows the form column to grow and shrink as needed to fill the available space within its flex container */
-    flex: 1;
-    padding: 40px;
-    border-right: 1px solid #e1e8ed;
-}
-
-.logo-column {
-    flex: 1; 
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #1da1f2;
-    border-top-right-radius: 10px; 
-    border-bottom-right-radius: 10px;
-    color: #fff;
-}
-
-.logo-column h1 {
-    font-size: 36px; 
-    font-weight: bold;
+@media (max-width: 500px) {
+    .login-form-container {
+        max-width: 90vw;
+        padding: 1rem;
+        border-radius: 20px;
+    }
 }

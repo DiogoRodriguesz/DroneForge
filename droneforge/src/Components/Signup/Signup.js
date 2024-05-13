@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Container, Form, Button, Alert } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
 import './Signup.css';
 
 function Signup() {
@@ -7,6 +8,7 @@ function Signup() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const navigate = useNavigate();
 
   const handleUsernameChange = (e) => {
     setUsername(e.target.value);
@@ -39,6 +41,8 @@ function Signup() {
         localStorage.setItem('token', data.token);
         console.log('Registration successful');
         setError('');
+        // Redirect to the homepage
+        navigate('/');
       } else {
         // Handle errors from the server
         const data = await response.json();
