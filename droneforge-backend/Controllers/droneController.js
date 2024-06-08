@@ -127,11 +127,88 @@ const getMostUsedPart = async (req, res) => {
   }
 };
 
+// Get the total sales
+const getTotalSales = async (req, res) => {
+  try {
+    const totalSales = await Drone.aggregate([
+      { $group: { _id: null, total: { $sum: "$totalPrice" } } }
+    ]);
+    
+    const total = totalSales.length > 0 ? totalSales[0].total : 0;
+    res.status(200).json({ total });
+  } catch (error) {
+    res.status(500).json({ message: 'Error calculating total sales', error });
+  }
+};
+
+// Get drones built each day
+const countDronesByDay = async (req, res) => {
+  try {
+    const now = new Date();
+    const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    
+    const intervals = Array.from({ length: 7 }, (_, i) => {
+      const date = new Date(startOfToday);
+      date.setDate(date.getDate() - i);
+      return {
+        start: date,
+        end: new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1)
+      };
+    }).reverse();
+
+    const counts = await Promise.all(intervals.map(interval => 
+      Drone.countDocuments({ createdAt: { $gte: interval.start, $lt: interval.end } })
+    ));
+
+    res.status(200).json(counts);
+  } catch (error) {
+    res.status(500).json({ message: 'Error counting drones by day', error });
+  }
+};
+
+// Get sales by time intervals
+const getWeeklySales = async (req, res) => {
+  try {
+    const now = new Date();
+    const oneWeekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+
+    const salesData = await Drone.aggregate([
+      { $match: { createdAt: { $gte: oneWeekAgo } } },
+      { $group: { _id: { $dayOfWeek: "$createdAt" }, totalSales: { $sum: "$totalPrice" } } },
+      { $sort: { _id: 1 } }
+    ]);
+
+    const salesByDay = Array(7).fill(0);
+    salesData.forEach(sale => {
+      salesByDay[sale._id - 1] = sale.totalSales;
+    });
+
+    res.status(200).json(salesByDay);
+  } catch (error) {
+    res.status(500).json({ message: 'Error getting weekly sales', error });
+  }
+};
+
+// Get drones built by a user
+const getUserDrones = async (req, res) => {
+  try {
+    const userId = req.user._id; // Assuming you have user info in req.user from authMiddleware
+    const userDrones = await Drone.find({ user: userId }).populate('user', 'name');
+    res.status(200).json(userDrones);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching user drones', error });
+  }
+};
+
 module.exports = {
   getDroneParts,
   createDrone,
   addPart,
   countDrones,
   countDronesByTimeIntervals,
-  getMostUsedPart
+  getMostUsedPart,
+  getTotalSales,
+  countDronesByDay,
+  getWeeklySales,
+  getUserDrones,
 };

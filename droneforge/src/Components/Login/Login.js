@@ -48,6 +48,13 @@ function Login() {
     };
   }, []); // Empty dependency array ensures this effect runs only once
 
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      navigate('/workspace/dashboard');
+    }
+  }, [navigate]); // Runs only once when the component mounts
+
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
@@ -68,7 +75,7 @@ function Login() {
       if (response.ok) {
         const data = await response.json();
         localStorage.setItem('token', data.token);
-        navigate('/workspace/drone-builder'); // Update the navigate function call to go to the main page
+        navigate('/workspace/dashboard'); // Update the navigate function call to go to the main page
       } else {
         setError('Invalid email or password');
       }

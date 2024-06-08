@@ -29,7 +29,7 @@ const SuccessScreen = () => {
           if (animationInstance.current) {
             animationInstance.current.destroy();
           }
-        }, 2300); // 2.3 seconds
+        }, 2400); // 2.3 seconds
 
       } catch (error) {
         console.error('Failed to load animation data:', error);

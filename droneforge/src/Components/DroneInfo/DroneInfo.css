@@ -1,0 +1,139 @@
+/* Common CSS */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: 'Poppins', sans-serif;
+    color: #333;
+    padding: 20px;
+  }
+  
+  .drone-info-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+  }
+  
+  .drone-info-card {
+    background: #ffffff;
+    border-radius: 20px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    width: 90%;
+    max-width: 600px;
+    border: none;
+    padding: 20px;
+    position: relative;
+  }
+  
+  .close-button {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: #ffc1c1; /* Reddish pastel color */
+    border: none;
+    font-size: 1rem;
+    color: #333;
+    cursor: pointer;
+    padding: 0.5rem 1rem;
+    border-radius: 10px;
+  }
+  
+  .close-button:hover {
+    background: #ff9999; /* Darker pastel red on hover */
+  }
+  
+  .drone-info-header {
+    font-size: 1.8rem;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 20px;
+    color: #4ECCA3; /* Updated to pastel green */
+  }
+  
+  .drone-info-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .drone-info-image-placeholder {
+    width: 150px;
+    height: 150px;
+    background: #eeeeee;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+  
+  .drone-info-status {
+    padding: 0.5rem 1rem;
+    border-radius: 15px;
+    margin-bottom: 20px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    color: #fff;
+  }
+  
+  .drone-info-status.completed {
+    background-color: #A1E3D8; /* Softer pastel green */
+  }
+  
+  .drone-info-status.in-progress {
+    background-color: #FFD5C2; /* Softer pastel orange */
+  }
+  
+  .drone-info-details {
+    width: 100%;
+  }
+  
+  .drone-info-item {
+    font-size: 1.1rem;
+    padding: 10px 0;
+  }
+  
+  .drone-info-item strong {
+    color: #4ECCA3; /* Use a consistent pastel green tone */
+  }
+  
+  .drone-info-item span {
+    color: #bbb;
+    font-weight: normal;
+  }
+  
+  .drone-info-details ul {
+    list-style-type: none;
+    padding-left: 0;
+  }
+  
+  .drone-info-details ul li {
+    margin-bottom: 0.5rem;
+    color: #999;
+    font-weight: bold;
+  }
+  
+  /* Media Queries */
+  @media (max-width: 768px) {
+    .drone-info-card {
+      padding: 10px;
+    }
+  
+    .drone-info-header {
+      font-size: 1.5rem;
+    }
+  
+    .drone-info-item {
+      font-size: 1rem;
+    }
+  
+    .drone-info-image-placeholder {
+      width: 120px;
+      height: 120px;
+    }
+  }
+  

@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'; // Updated import for navigation
 import Sidebar from '../Sidebar/Sidebar';
 import { Check } from 'react-bootstrap-icons';
 import './DroneBuilder.css';
-import SuccessScreen from '../SuccessScreen/SuccessScreen';
+import SuccessScreen from '../SuccessScreen/SuccessScreen'; // Ensure you import the SuccessScreen component
 
 const DroneBuilder = () => {
   const [parts, setParts] = useState({
@@ -198,8 +198,8 @@ const DroneBuilder = () => {
         // Redirect after a short delay
         setTimeout(() => {
           setIsSuccess(false); // Hide the success screen
-          navigate('/'); // Redirect to the desired route
-        }, 2300); // Show success screen for 6 seconds
+          navigate('/workspace/dashboard'); // Redirect to the desired route
+        }, 2400); // Show success screen for 6 seconds
       } else {
         const data = await response.json();
         throw new Error(data.message || "Something went wrong");
@@ -212,64 +212,73 @@ const DroneBuilder = () => {
 
   const progressPercentage = ((currentStep - 1) / (steps.length - 1)) * 100;
 
-  if (isSuccess) {
-    return <SuccessScreen />;
-  }
+  const isConfirmEnabled = selectedParts.frame && selectedParts.motor.part && selectedParts.controller && selectedParts.propeller.part && selectedParts.battery.part && selectedParts.camera && selectedParts.gps && selectedParts.sensor.part;
 
   return (
     <div className="dronebuilder-container">
       <div className="background-overlay"></div>
-      <Sidebar />
-      <div className="main-content">
-        <div className="header-container">
-          <span role="img" aria-label="drone">🛠️</span>
-        </div>
-        <div className="wizard-container">
-          <h2 className="centered-heading">
-            What <span className={`word-text ${wordTransitioning ? 'word-hidden' : 'word-visible'}`}><strong>{currentPartType.charAt(0).toUpperCase() + currentPartType.slice(1)}</strong></span> would you like to select?
-          </h2>
-          <div className={`part-options centered ${partTransitioning ? 'part-hidden' : 'part-visible'}`}>
-            {parts[currentPartType].map((part) => (
-              <div
-                key={part.name}
-                className={`part-item ${selectedParts[currentPartType]?.part?.name === part.name || selectedParts[currentPartType]?.name === part.name ? 'selected' : ''}`}
-                onClick={() => handlePartSelect(currentPartType, part)}
-              >
-                <img src={part.imageUrl} alt={part.name} className="part-image" />
-                <div className="title">{part.name}</div>
-                <p className="price">${part.price}</p>
-                {(selectedParts[currentPartType]?.part?.name === part.name || selectedParts[currentPartType]?.name === part.name) && (
-                  <div className="check-icon">
-                    <Check />
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
-          {['motor', 'propeller', 'battery', 'sensor'].includes(currentPartType) && (
-            <div className="quantity-selector">
-              <label htmlFor={`${currentPartType}-quantity`}>Quantity:</label>
-              <input
-                id={`${currentPartType}-quantity`}
-                type="number"
-                min="1"
-                step="1"  // Slows down the scrolling speed
-                value={selectedParts[currentPartType]?.quantity}
-                onChange={(e) => handleQuantityChange(currentPartType, e)}
-                onFocus={handleInputFocus}
-              />
+      {isSuccess && <SuccessScreen />}
+      {!isSuccess && (
+        <>
+          <Sidebar />
+          <div className="main-content">
+            <div className="header-container">
+              <span role="img" aria-label="drone">🛠️</span>
             </div>
-          )}
-        </div>
-        <div className="bar-container centered">
-          <p>Total Price: <span className="price">${totalPrice}</span></p>
-        </div>
-        <div className="navigation-buttons centered">
-          {currentStep > 1 && <button className="button-common" onClick={prevStep} disabled={isTransitioning}>Previous</button>}
-          {!isLastStep && <button className="button-common" onClick={nextStep} disabled={isTransitioning}>Next</button>}
-          {isLastStep && <button className="button-common button-confirm" onClick={handleConfirm}>Confirm</button>}
-        </div>
-      </div>
+            <div className="wizard-container">
+              <h2 className="centered-heading">
+                What <span className={`word-text ${wordTransitioning ? 'word-hidden' : 'word-visible'}`}><strong>{currentPartType.charAt(0).toUpperCase() + currentPartType.slice(1)}</strong></span> would you like to select?
+              </h2>
+              <div className={`part-options centered ${partTransitioning ? 'part-hidden' : 'part-visible'}`}>
+                {parts[currentPartType].map((part) => (
+                  <div
+                    key={part.name}
+                    className={`part-item ${selectedParts[currentPartType]?.part?.name === part.name || selectedParts[currentPartType]?.name === part.name ? 'selected' : ''}`}
+                    onClick={() => handlePartSelect(currentPartType, part)}
+                  >
+                    <img src={part.imageUrl} alt={part.name} className="part-image" />
+                    <div className="title">{part.name}</div>
+                    <p className="price">${part.price}</p>
+                    {(selectedParts[currentPartType]?.part?.name === part.name || selectedParts[currentPartType]?.name === part.name) && (
+                      <div className="check-icon">
+                        <Check />
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+              {['motor', 'propeller', 'battery', 'sensor'].includes(currentPartType) && (
+                <div className="quantity-selector">
+                  <label htmlFor={`${currentPartType}-quantity`}>Quantity:</label>
+                  <input
+                    id={`${currentPartType}-quantity`}
+                    type="number"
+                    min="1"
+                    step="1"  // Slows down the scrolling speed
+                    value={selectedParts[currentPartType]?.quantity}
+                    onChange={(e) => handleQuantityChange(currentPartType, e)}
+                    onFocus={handleInputFocus}
+                  />
+                </div>
+              )}
+            </div>
+            <div className="bar-container centered">
+              <p>Total Price: <span className="price">${totalPrice}</span></p>
+            </div>
+            <div className="navigation-buttons centered">
+              {currentStep > 1 && <button className="button-common" onClick={prevStep} disabled={isTransitioning}>Previous</button>}
+              {!isLastStep && <button className="button-common" onClick={nextStep} disabled={isTransitioning}>Next</button>}
+              {isLastStep && <button
+                className={`button-common button-confirm ${isConfirmEnabled ? 'enabled' : 'disabled'}`}
+                onClick={handleConfirm}
+                disabled={!isConfirmEnabled}
+              >
+                Confirm
+              </button>}
+            </div>
+          </div>
+        </>
+      )}
       <div className="progress-bar-container">
         <div className="progress-bar" style={{ width: `${progressPercentage}%` }}></div>
       </div>

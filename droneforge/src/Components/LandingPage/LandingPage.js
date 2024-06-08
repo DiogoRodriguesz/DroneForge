@@ -1,9 +1,22 @@
 import React from 'react';
 import { Container, Navbar, Nav, Button } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
 import './LandingPage.css';
 import droneImage from '../../assets/drone.png'; // Ensure the path to your drone image is correct
 
 const LandingPage = () => {
+  const navigate = useNavigate();
+
+  const handleWorkspaceClick = (e) => {
+    e.preventDefault();
+    const token = localStorage.getItem('token');
+    if (token) {
+      navigate('/workspace/dashboard');
+    } else {
+      navigate('/signup');
+    }
+  };
+
   return (
     <div className="custom-landing-page">
       <Navbar expand="lg" className="custom-navbar">
@@ -12,7 +25,7 @@ const LandingPage = () => {
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="ml-auto custom-nav-links">
-              <Nav.Link href="workspace/dashboard" className="custom-nav-link">Workspace</Nav.Link>
+              <Nav.Link href="#" onClick={handleWorkspaceClick} className="custom-nav-link">Workspace</Nav.Link>
               <Nav.Link href="about" className="custom-nav-link">About</Nav.Link>
               <Nav.Link href="login" className="custom-nav-link">Sign In</Nav.Link>
               <Button href="signup" className="custom-btn-signup">Sign Up for Free</Button>

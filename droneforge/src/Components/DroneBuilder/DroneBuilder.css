@@ -298,6 +298,23 @@
   transform: translateY(-3px);
 }
 
+/* Confirm button styles */
+.button-confirm {
+  background-color: #8a2be2; /* Purple color */
+  opacity: 0.5; /* More transparent by default */
+  pointer-events: none; /* Disable clicks by default */
+}
+
+.button-confirm.enabled {
+  opacity: 1; /* Fully opaque when enabled */
+  pointer-events: auto; /* Enable clicks when enabled */
+}
+
+.button-confirm:hover {
+  background-color: #6c22b5; /* Darker purple on hover */
+  box-shadow: 0 4px 8px rgba(138, 43, 226, 0.2); /* Purple shadow */
+}
+
 /* Bottom bar container styles */
 .bottom-bar {
   width: 100%;
@@ -348,7 +365,6 @@
   background-color: #333;
   transition: width 0.6s ease; /* Smooth transition for width change */
 }
-
 
 /* Media Queries for Responsive Design */
 @media (max-width: 768px) {

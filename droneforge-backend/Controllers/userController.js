@@ -11,7 +11,7 @@ exports.registerUser = async (req, res) => {
     await newUser.save();
 
     const token = jwt.sign(
-      { userId: newUser._id, username: newUser.username, name: newUser.username },
+      { userId: newUser._id, username: newUser.username, email: newUser.email },
       secretKey,
       { expiresIn: '1h' }
     );
@@ -39,7 +39,7 @@ exports.loginUser = async (req, res) => {
     }
 
     const token = jwt.sign(
-      { userId: user._id, username: user.username, name: user.username },
+      { userId: user._id, username: user.username, email: user.email },
       secretKey,
       { expiresIn: '1h' }
     );
@@ -48,5 +48,32 @@ exports.loginUser = async (req, res) => {
   } catch (error) {
     console.error('Error logging in user:', error);
     res.status(500).json({ error: 'Failed to log in user' });
+  }
+};
+
+exports.editUser = async (req, res) => {
+  try {
+    const { userId } = req.user;
+    const { username, email, password } = req.body;
+    
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    if (username) user.username = username;
+    if (email) user.email = email;
+    if (password) {
+      const hashedPassword = await bcrypt.hash(password, 10);
+      user.password = hashedPassword;
+    }
+
+    await user.save();
+
+    res.status(200).json({ message: 'Profile updated successfully' });
+  } catch (error) {
+    console.error('Error updating profile:', error);
+    res.status(500).json({ error: 'Failed to update profile' });
   }
 };
